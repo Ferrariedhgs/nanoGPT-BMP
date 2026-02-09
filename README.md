@@ -1,4 +1,4 @@
-
+** WORK IN PROGRESS **
 # nanoGPT
 
 ![nanoGPT](assets/nanogpt.jpg)
