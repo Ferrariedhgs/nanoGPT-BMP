@@ -8,7 +8,11 @@ import glob
 def load_image_as_array(path):
     #load image
     img = Image.open(path)
-    arr = np.array(img)
+
+    #resize the image to use less meory
+    resized_img = img.resize((64, 64))
+
+    arr = np.array(resized_img)
 
     #split channels
     r,g,b = np.split(arr,3,axis=2)
@@ -48,6 +52,10 @@ def bmp_to_img(bitmap):
     img = bmp12_to_rgb24(bitmap)
     return img
 
+def testimage(name="testimage.png"):
+    bmp = np.arange(0x1000, dtype=np.uint16)
+    bmp = bmp.reshape((64, 64))
+    save_bmp(bmp, name=name)
 
 
 
@@ -59,14 +67,14 @@ def main():
     bmp=load_image_as_array(img_path)
     save_bmp(bmp)
     
-    H, W = 512, 512
+    H, W = 64,64
     tokens_per_image = H * W
 
     all_tokens = []
 
     dir=os.path.dirname(os.path.realpath(__file__))
 
-    img_folder="images/*.png"
+    img_folder=f'F:\\Projects\\datasets\\ssd-1b\\output\\*.png'
 
     image_paths = sorted(glob.glob(img_folder))
     for p in image_paths:
