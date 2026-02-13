@@ -29,12 +29,12 @@ Sky/grass separation
 Coherent texture regions
 
 Output after 200, 400, 800, 1600, 3000 and 6000 training iterations
-[200 iterations](out/images/output200.png)
-[400 iterations](out/images/output400.png)
-[800 iterations](out/images/output800.png)
-[1600 iterations](out/images/output1600.png)
-[3000 iterations](out/images/output3000.png)
-[6000 iterations](out/images/output6000.png)
+![200 iterations](out/images/output200.png)
+![400 iterations](out/images/output400.png)
+![800 iterations](out/images/output800.png)
+![1600 iterations](out/images/output1600.png)
+![3000 iterations](out/images/output3000.png)
+![6000 iterations](out/images/output6000.png)
 
 Untill 200 iterations the images produced are just noise, altough some grass patches can be seen. Actual coherent images appear around 3000 iterations
 
