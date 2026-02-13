@@ -29,6 +29,7 @@ Sky/grass separation
 Coherent texture regions
 
 Output after 200, 400, 800, 1600, 3000 and 6000 training iterations
+
 ![200 iterations](out/images/output200.png)
 ![400 iterations](out/images/output400.png)
 ![800 iterations](out/images/output800.png)
