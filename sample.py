@@ -22,6 +22,7 @@ max_new_tokens = 64*64 # number of tokens generated in each sample
 temperature = 0.8 # 1.0 = no change, < 1.0 = less random, > 1.0 = more random, in predictions
 top_k = 200 # retain only the top_k most likely tokens, clamp others to have 0 probability
 seed = 1337
+seeds=[1337,42,67,69,420,0]
 device = 'cuda' # examples: 'cpu', 'cuda', 'cuda:0', 'cuda:1', etc.
 dtype = 'bfloat16' if torch.cuda.is_available() and torch.cuda.is_bf16_supported() else 'float16' # 'float32' or 'bfloat16' or 'float16'
 compile = False # use PyTorch 2.0 to compile the model to be faster
@@ -33,13 +34,14 @@ torch.cuda.manual_seed(seed)
 torch.backends.cuda.matmul.allow_tf32 = True # allow tf32 on matmul
 torch.backends.cudnn.allow_tf32 = True # allow tf32 on cudnn
 device_type = 'cuda' if 'cuda' in device else 'cpu' # for later use in torch.autocast
-ptdtype = {'float32': torch.float32, 'bfloat16': torch.bfloat16, 'float16': torch.float16}[dtype]
+#ptdtype = {'float32': torch.float32, 'bfloat16': torch.bfloat16, 'float16': torch.float16}[dtype]
+ptdtype=torch.float16
 ctx = nullcontext() if device_type == 'cpu' else torch.amp.autocast(device_type=device_type, dtype=ptdtype)
 
 # model
 if init_from == 'resume':
     # init from a model saved in a specific directory
-    ckpt_path = os.path.join(out_dir,'old', 'ckpt1400.pt')
+    ckpt_path = os.path.join(out_dir,'old', 'ckpt10k.pt')
     checkpoint = torch.load(ckpt_path, map_location=device)
     gptconf = GPTConfig(**checkpoint['model_args'])
     model = GPT(gptconf)
@@ -87,15 +89,26 @@ if start.startswith('FILE:'):
 start_ids=0
 
 #x = (torch.tensor(start_ids, dtype=torch.long, device=device)[None, ...])
+first_pixel=[0xfec,0x8ee,0x160] #12 bit colors for the first pixel: sky gray, sky blue, grass green
+for seed in seeds:
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
 
-x = torch.zeros((1, 1), dtype=torch.long, device=device)
-y = model.generate(x, max_new_tokens=4095, temperature=temperature)
+    #x = torch.zeros((1, 1), dtype=torch.long, device=device)
+    x = torch.tensor([[0xF0F]], dtype=torch.long, device=device)
 
-pixels = y[0, 1:].cpu().numpy()
-pixels = np.append(pixels, pixels[-1])   # duplicate last value
-img = pixels.reshape(64, 64)
+    y = model.generate(x, max_new_tokens=4095, temperature=temperature)
 
-extras.save_bmp(img,"out/images/output1400.png")
+    pixels = y[0].cpu().numpy()
 
-print("saved image")
+    img = pixels.reshape(64, 64)
+
+    extras.save_bmp(img,f'out/images/output10k-{seed}-{x.tolist()}.png')
+    print(f'saved image with seed {seed}')
+    break
+
+print("finished")
+#extras.testimage()
+
+
 
