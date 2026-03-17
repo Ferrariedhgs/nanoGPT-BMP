@@ -1,6 +1,10 @@
+
 A minimal GPT-style transformer trained directly on raw pixel tokens to generate images: no diffusion or VAE. Based on the original [NanoGPT by Andrej Karpathy](https://github.com/karpathy/nanoGPT)
 
 Trained on my [synthetic dataset with forest/field landscapes](https://huggingface.co/datasets/ferrariedhgs/Nature-Landscape)
+
+## [Test on HuggingFace](https://huggingface.co/spaces/ferrariedhgs/NanoGPT-BMP-Landscape)
+
 
 This project explores what happens when you treat images exactly like language:
 
